@@ -1,0 +1,110 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: thanos-test
+  labels:
+    app: thanos
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: thanos
+  namespace: thanos-test
+  labels:
+    app: thanos
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: thanos
+  namespace: thanos-test
+  labels:
+    app: thanos
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: thanos
+  template:
+    metadata:
+      labels:
+        app: thanos
+    spec:
+      serviceAccountName: thanos
+      containers:
+      - name: thanos
+        image: cleanstart/thanos:latest-dev
+        imagePullPolicy: IfNotPresent
+        # Binary is located at /usr/bin/thanos
+        # Running Thanos Query component for testing
+        command: ["/usr/bin/thanos"]
+        args:
+        - query
+        - --http-address=0.0.0.0:10902
+        - --grpc-address=0.0.0.0:10901
+        - --log.level=info
+        env:
+        - name: SSL_CERT_FILE
+          value: /etc/ssl/certs/ca-certificates.crt
+        ports:
+        - containerPort: 10901
+          name: grpc
+          protocol: TCP
+        - containerPort: 10902
+          name: http
+          protocol: TCP
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "256Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+        livenessProbe:
+          httpGet:
+            path: /-/healthy
+            port: 10902
+          initialDelaySeconds: 30
+          periodSeconds: 20
+          timeoutSeconds: 5
+          failureThreshold: 6
+        readinessProbe:
+          httpGet:
+            path: /-/ready
+            port: 10902
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 6
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          runAsNonRoot: true
+          runAsUser: 1000
+          readOnlyRootFilesystem: false
+      securityContext:
+        fsGroup: 1000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: thanos
+  namespace: thanos-test
+  labels:
+    app: thanos
+spec:
+  type: ClusterIP
+  ports:
+  - port: 10901
+    targetPort: 10901
+    protocol: TCP
+    name: grpc
+  - port: 10902
+    targetPort: 10902
+    protocol: TCP
+    name: http
+  selector:
+    app: thanos
+
