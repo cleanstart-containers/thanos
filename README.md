@@ -4,7 +4,7 @@ This project provides a CleanStart container image for **Thanos**, a highly avai
 
 **📌 CleanStart Foundation:** Security-hardened, minimal base OS designed for enterprise containerized environments.
 
-**Image Path:** `cleanstart/thanos`
+**Image Path:** `ghcr.io/cleanstart-containers/thanos`
 
 **Registry:** CleanStart Registry
 
@@ -37,7 +37,7 @@ The Thanos container project is organized into the following structure:
 
 ## Container Image
 
-**Image:** `cleanstart/thanos:latest-dev`
+**Image:** `ghcr.io/cleanstart-containers/thanos:latest-dev`
 
 The container image includes:
 
@@ -88,15 +88,15 @@ Typical scenarios where this container excels:
 
 ### Pull Commands
 ```bash
-docker pull cleanstart/thanos:latest
-docker pull cleanstart/thanos:latest-dev
+docker pull ghcr.io/cleanstart-containers/thanos:latest
+docker pull ghcr.io/cleanstart-containers/thanos:latest-dev
 ```
 
 ### Run Commands
 
 Basic test:
 ```bash
-docker run -it --name thanos-test cleanstart/thanos:latest-dev
+docker run -it --name thanos-test ghcr.io/cleanstart-containers/thanos:latest-dev
 ```
 
 Production deployment:
@@ -105,7 +105,7 @@ docker run -d --name thanos-prod \
   --read-only \
   --security-opt=no-new-privileges \
   --user 1000:1000 \
-  cleanstart/thanos:latest
+  ghcr.io/cleanstart-containers/thanos:latest
 ```
 
 ---
@@ -145,8 +145,8 @@ CleanStart images support multiple architectures to ensure compatibility across 
 
 ### Architecture-based Pull Commands
 ```bash
-docker pull --platform linux/amd64 cleanstart/thanos:latest
-docker pull --platform linux/arm64 cleanstart/thanos:latest
+docker pull --platform linux/amd64 ghcr.io/cleanstart-containers/thanos:latest
+docker pull --platform linux/arm64 ghcr.io/cleanstart-containers/thanos:latest
 ```
 
 ---
