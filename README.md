@@ -171,7 +171,7 @@ Production considerations:
 - **Thanos GitHub Repository:** https://github.com/thanos-io/thanos
 - **Provenance / SBOM / Signature:** https://images.cleanstart.com/images/thanos
 - **Docker Hub:** https://hub.docker.com/r/cleanstart/thanos
-- **CleanStart All Images:** https://images.cleanstart.com
+- **CleanStart All Images:** https://images.cleanstart.com/images/thanos/details
 - **CleanStart Community Images:** https://hub.docker.com/u/cleanstart
   
 ---
